@@ -1,13 +1,13 @@
 package com.tody.datamodel;
 
 /**
- * Created by Tody_ on 20/05/2017.
+ * Created by Olha Dovhal on 20/05/2017.
  */
 public class DeptAdmin {
-    int id;
-    String name;
-    String password;
-    String userType = "DA";
+    private int id;
+    private String name;
+    private String password;
+    private String userType = "DA";
 
     public int getId() {
         return id;

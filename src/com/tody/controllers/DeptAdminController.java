@@ -19,10 +19,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by Tody_ on 12/06/2017.
+ * Created by Olha Dovhal on 12/06/2017.
  */
 public class DeptAdminController {
-    String id;
     @FXML
     BorderPane borderPane;
 
@@ -36,21 +35,31 @@ public class DeptAdminController {
     @FXML
     Button viewPatientBtn;
     @FXML
-    Label userId, userName,userName1, nameLabel, reasonLabel, phoneLabel, addressLabel, referLabel, ipidLabel, opidLabel, ageLabel;
+    Label userId, userName, userName1, nameLabel, reasonLabel, phoneLabel, addressLabel, referLabel, ipidLabel, opidLabel, ageLabel;
     @FXML
     TextField nameTxtFd, reasonTxtFd, phoneTxtFd, addressTxtFd, ipidTxtFd, opidTxtFd, ageTxtFd, usrInput,
             viewID, viewName, viewAge, viewAddress, viewPhone;
     @FXML
-    ChoiceBox referBox;
+    ChoiceBox<String> referBox;
 
     @FXML
     GridPane gridPane;
 
     @FXML
-    TableView patientsTable;
+    TableView<Patient> patientsTable;
 
     @FXML
-    TableColumn idCol, nameCol, ageCol, addressCol, phoneCol;
+    TableColumn<Patient, String> idCol;
+    @FXML
+    TableColumn<Patient, String> nameCol;
+    @FXML
+    TableColumn<Patient, Integer> ageCol;
+    @FXML
+    TableColumn<Patient, String> addressCol;
+    @FXML
+    TableColumn<Patient, String> phoneCol;
+
+    private String id;
 
     public void initialize() {
     }
@@ -115,7 +124,7 @@ public class DeptAdminController {
 
     @FXML
     private void onSelect() {
-        if (referBox.getSelectionModel().getSelectedItem() != "Select Doctor") {
+        if (!"Select Doctor".equals(referBox.getSelectionModel().getSelectedItem())) {
             generateIPID();
         }
     }
@@ -127,11 +136,11 @@ public class DeptAdminController {
 
             ArrayList<Character> list = new ArrayList<>();
             for (char i = 'A'; i <= 'Z'; i++) {
-                list.add(new Character(i));
+                list.add(i);
             }
             ArrayList<Integer> list1 = new ArrayList<>();
             for (int i = 0; i <= 9; i++) {
-                list1.add(new Integer(i));
+                list1.add(i);
             }
             Collections.shuffle(list);
             Collections.shuffle(list1);
@@ -186,7 +195,7 @@ public class DeptAdminController {
         String id = usrInput.getText().toUpperCase().trim();
         if (!id.isEmpty() && id.length() == 5) {
             Patient patient = Datasource.getInstance().queryPatient(id);
-            if(patient != null) {
+            if (patient != null) {
                 String ip_id = patient.getIp_id();
                 String name = patient.getName();
                 int age = patient.getAge();
@@ -199,24 +208,23 @@ public class DeptAdminController {
                 viewAddress.setText(address);
                 viewPhone.setText(phone);
                 gridPane.setVisible(true);
-        }
-        else {
-            Alert error = new Alert(Alert.AlertType.ERROR, "Check IPID");
-            error.setHeaderText(null);
-            error.show();
-        }
+            } else {
+                Alert error = new Alert(Alert.AlertType.ERROR, "Check IPID");
+                error.setHeaderText(null);
+                error.show();
             }
+        }
 
 
     }
 
     @FXML
     private void viewPatients() {
-        idCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("ip_id"));
-        nameCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("name"));
-        ageCol.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("age"));
-        addressCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("address"));
-        phoneCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("phone"));
+        idCol.setCellValueFactory(new PropertyValueFactory<>("ip_id"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        ageCol.setCellValueFactory(new PropertyValueFactory<>("age"));
+        addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+        phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
 
 //        Task<ObservableList<Patient>> task = new GetAllPatientsTask();
 //        patientsTable.itemsProperty().bind(task.valueProperty());

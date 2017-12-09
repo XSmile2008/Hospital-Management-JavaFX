@@ -1,14 +1,13 @@
 package com.tody.datamodel;
 
 /**
- * Created by Tody_ on 20/05/2017.
+ * Created by Olha Dovhal on 20/05/2017.
  */
 public class FrontDeskUser {
-    int id;
-    String name;
-    String password;
-    String userType = "FD";
-
+    private int id;
+    private String name;
+    private String password;
+    private String userType = "FD";
 
     public int getId() {
         return id;

@@ -10,7 +10,7 @@ import javafx.scene.control.TextArea;
 import java.time.LocalDate;
 
 /**
- * Created by Tody_ on 18/07/2017.
+ * Created by Olha Dovhal on 18/07/2017.
  */
 public class TreatmentDialogController extends DoctorsUIController {
     @FXML
@@ -24,10 +24,6 @@ public class TreatmentDialogController extends DoctorsUIController {
         String ip_id = patient.getIp_id();
         int doc_id = doc.getId();
 
-        if (Datasource.getInstance().storeTreatment(ip_id, doc_id, note, trtDate)) {
-            return true;
-        } else {
-            return false;
-        }
+        return Datasource.getInstance().storeTreatment(ip_id, doc_id, note, trtDate);
     }
 }

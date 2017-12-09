@@ -2,18 +2,19 @@ package com.tody.datamodel;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Created by Tody_ on 20/05/2017.
+ * Created by Olha Dovhal on 20/05/2017.
  */
 public class Patient {
-    SimpleStringProperty ip_id;
-    SimpleStringProperty name;
-    SimpleIntegerProperty age;
-    SimpleStringProperty address;
-    SimpleStringProperty phone;
-    ObservableList<TreatmentDetails> treatmentDetails;
+    private SimpleStringProperty ip_id;
+    private SimpleStringProperty name;
+    private SimpleIntegerProperty age;
+    private SimpleStringProperty address;
+    private SimpleStringProperty phone;
+    private ObservableList<TreatmentDetails> treatmentDetails;
 
     public Patient() {
         this.ip_id = new SimpleStringProperty();
@@ -21,7 +22,7 @@ public class Patient {
         this.age = new SimpleIntegerProperty();
         this.address = new SimpleStringProperty();
         this.phone = new SimpleStringProperty();
-        this.treatmentDetails = treatmentDetails;
+        this.treatmentDetails = FXCollections.observableArrayList();
     }
 
     public String getIp_id() {

@@ -3,20 +3,13 @@ package com.tody.datamodel;
 import java.time.LocalDate;
 
 /**
- * Created by Tody_ on 20/05/2017.
+ * Created by Olha Dovhal on 20/05/2017.
  */
 public class TreatmentDetails {
     LocalDate date;
     String ip_id;
     int doc_id;
     String details;
-
-    public TreatmentDetails() {
-        this.ip_id = ip_id;
-        this.doc_id = doc_id;
-        this.details = details;
-        this.date = date;
-    }
 
     public LocalDate getDate() {
         return date;

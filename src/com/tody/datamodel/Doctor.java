@@ -1,21 +1,14 @@
 package com.tody.datamodel;
 
 /**
- * Created by Tody_ on 20/05/2017.
+ * Created by Olha Dovhal on 20/05/2017.
  */
 public class Doctor {
-    int id;
-    String name;
-    String speciality;
-    String userType;
-    String password;
-
-    public Doctor() {
-        this.id = id;
-        this.name = name;
-        this.speciality = speciality;
-        this.userType = "DOC";
-    }
+    private int id;
+    private String name;
+    private String speciality;
+    private String userType = "DOC";
+    private String password;
 
     public int getId() {
         return id;

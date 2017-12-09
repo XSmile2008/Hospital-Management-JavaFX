@@ -2,14 +2,11 @@ package com.tody.controllers;
 
 import com.tody.datamodel.Datasource;
 import com.tody.datamodel.FrontDeskUser;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
 
 public class FrontDeskController {
     @FXML
@@ -23,11 +20,11 @@ public class FrontDeskController {
     @FXML
     TextField opName;
     @FXML
-    ComboBox visitReason;
+    ComboBox<String> visitReason;
     @FXML
     TextField opId;
 
-    String id;
+    private String id;
 
     public void initialize() {
         visitReason.getItems().addAll("Select Reason", "Medical Check Up", "Emergency", "Doctor's Appointment");
@@ -37,12 +34,9 @@ public class FrontDeskController {
         visitReason.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> reasonError());
         opName.textProperty().addListener((observable, oldValue, newValue) -> validateName());
 
-        opName.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(validateName()) {
-                    generateOPId();
-                }
+        opName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (validateName()) {
+                generateOPId();
             }
         });
 
@@ -72,12 +66,12 @@ public class FrontDeskController {
     @FXML
     private void generateOPId() {
         if (validateName() && opId.getText().isEmpty() &&
-                visitReason.getSelectionModel().getSelectedItem().toString() != "Select Reason") {
+                !"Select Reason".equals(visitReason.getSelectionModel().getSelectedItem())) {
             nameErrorLabel.setVisible(false);
             reasonErrorLabel.setVisible(false);
             ArrayList<Integer> list = new ArrayList<>();
             for (int i = 0; i <= 9; i++) {
-                list.add(new Integer(i));
+                list.add(i);
             }
             Collections.shuffle(list);
             StringBuilder number = new StringBuilder();
@@ -112,11 +106,7 @@ public class FrontDeskController {
     }
 
     private void reasonError() {
-        if (visitReason.getSelectionModel().getSelectedItem().toString() == "Select Reason") {
-            reasonErrorLabel.setVisible(true);
-        } else {
-            reasonErrorLabel.setVisible(false);
-        }
+        reasonErrorLabel.setVisible("Select Reason".equals(visitReason.getSelectionModel().getSelectedItem()));
     }
 
     @FXML
@@ -125,9 +115,9 @@ public class FrontDeskController {
         visitReason.setDisable(true);
         int opid = Integer.parseInt(opId.getText());
         String name = opName.getText();
-        String vReason = visitReason.getSelectionModel().getSelectedItem().toString();
+        String vReason = visitReason.getSelectionModel().getSelectedItem();
 
-        if (validateName() && vReason != "Select Reason" && !opId.getText().isEmpty()) {
+        if (validateName() && !"Select Reason".equals(vReason) && !opId.getText().isEmpty()) {
             if (Datasource.getInstance().storeOPID(opid, name, vReason)) {
                 Alert success = new Alert(Alert.AlertType.CONFIRMATION, "OPID : " + opid
                         + "\nName : " + name

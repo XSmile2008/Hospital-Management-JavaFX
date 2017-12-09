@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Tody_ on 06/06/2017.
+ * Created by Olha Dovhal on 06/06/2017.
  */
 public class Datasource {
     private static final String DB_NAME = "HospitalManagement.db";

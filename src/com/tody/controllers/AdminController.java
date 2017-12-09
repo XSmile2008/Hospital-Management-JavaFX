@@ -17,11 +17,13 @@ import javafx.scene.layout.*;
 import java.util.Optional;
 
 /**
- * Created by Tody_ on 20/07/2017.
+ * Created by Olha Dovhal on 20/07/2017.
  */
 public class AdminController {
-    public static final String ID = "Admin";
-    public static final String PASSWORD = "ADMIN";
+
+    private static final String ID = "Admin";
+    private static final String PASSWORD = "ADMIN";
+
     @FXML
     Label fPassLabel, fConfirmPassLabel, fUserIdLabel, fNameLabel;
     @FXML
@@ -68,15 +70,12 @@ public class AdminController {
         });
 
         /* implements form validation */
-        newUserForm.hoverProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (validateForm()) {
-                    addNewUsrBtn.setDisable(false);
-                } else {
-                    if (addNewUsrBtn.isVisible()) {
-                        addNewUsrBtn.setDisable(true);
-                    }
+        newUserForm.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (validateForm()) {
+                addNewUsrBtn.setDisable(false);
+            } else {
+                if (addNewUsrBtn.isVisible()) {
+                    addNewUsrBtn.setDisable(true);
                 }
             }
         });
@@ -85,18 +84,15 @@ public class AdminController {
         Dynamically adds form fields when adding a new user (depends on the type of user
         being added)
         */
-        usrType.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                RadioButton selectedRadioButton = (RadioButton) usrType.getSelectedToggle();
-                String selected = selectedRadioButton.getText().toUpperCase();
-                if (selected.equalsIgnoreCase("DOC")
-                        && newUserForm.getChildren().size() == 10) {
-                    addField();
-                } else {
-                    if (newUserForm.getChildren().size() == 12) {
-                        removeField();
-                    }
+        usrType.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            RadioButton selectedRadioButton = (RadioButton) usrType.getSelectedToggle();
+            String selected = selectedRadioButton.getText().toUpperCase();
+            if (selected.equalsIgnoreCase("DOC")
+                    && newUserForm.getChildren().size() == 10) {
+                addField();
+            } else {
+                if (newUserForm.getChildren().size() == 12) {
+                    removeField();
                 }
             }
         });
@@ -211,8 +207,7 @@ public class AdminController {
             }
             int id = Integer.parseInt(fIdTxtFd.getText().trim());
             String name = nameTxtFd.getText().trim();
-            String password = null;
-            password = fPassTxtFd.getText().trim();
+            String password = fPassTxtFd.getText().trim();
 
             if (Datasource.getInstance().addUser(selected, name, id, password, speciality)) {
                 status = true;
@@ -254,12 +249,7 @@ public class AdminController {
 
     // method for adding a listener that warns for mismatched passwords
     private void passErrorAlert(TextField f, Label l, TextField f2, Label l1) {
-        f.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                passError(f, l, f2, l1);
-            }
-        });
+        f.textProperty().addListener((observable, oldValue, newValue) -> passError(f, l, f2, l1));
     }
 
     // ensures the form fields are validated
@@ -278,7 +268,6 @@ public class AdminController {
                         return false;
                     } else {
                         speciality.setStyle("");
-                        b = true;
                     }
                 }
                 b = true;
@@ -312,7 +301,7 @@ public class AdminController {
                 "\nName : " + name);
 
         Optional<ButtonType> result = confirm.showAndWait();
-        if (result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             if (Datasource.getInstance().deleteUser(userType, id)) {
                 viewUsers();
                 Alert success = new Alert(Alert.AlertType.INFORMATION, "User successfully deleted");

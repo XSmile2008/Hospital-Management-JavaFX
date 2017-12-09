@@ -20,11 +20,12 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- * Created by Tody_ on 26/06/2017.
+ * Created by Olha Dovhal on 26/06/2017.
  */
 public class DoctorsUIController extends DeptAdminController {
-    Patient patient;
-    static Doctor doc;
+
+    private static Doctor doc;
+
     @FXML
     AnchorPane viewPatientUI;
     @FXML
@@ -48,6 +49,8 @@ public class DoctorsUIController extends DeptAdminController {
     Button viewTreatmentBtn, addTreatmentBtn;
     @FXML
     ImageView img;
+
+    private Patient patient;
 
     public void initialize(){
         RotateTransition rotateTransition = new RotateTransition();
@@ -171,7 +174,7 @@ public class DoctorsUIController extends DeptAdminController {
 
     public void setDoctor(String id) {
         Doctor doc = Datasource.getInstance().queryDoctor(id);
-        this.doc = doc;
+        DoctorsUIController.doc = doc;
         userId.setText(id);
         userName.setText(doc.getName());
         userName1.setText("Dr. " + doc.getName());
