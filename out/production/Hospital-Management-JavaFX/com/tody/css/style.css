@@ -1,4 +1,4 @@
-.white-text{
+.white-text {
     -fx-text-fill: white;
 }
 
@@ -19,29 +19,30 @@
     -fx-text-fill: white;
 }
 
-.fd-panel{
+.fd-panel {
     -fx-background-color: white;
     -fx-border-width: 0 1 0 0;
     -fx-border-color: #c03844;
 
 }
 
-#logOut_btn{
+#logOut_btn {
     -fx-background-color: transparent;
     -fx-border-color: #7f1c27;
     -fx-border-radius: 0;
     -fx-text-fill: #7f1c27;
 }
 
-#logOut_btn:hover{
+#logOut_btn:hover {
     -fx-background-color: #7f1c27;
     -fx-text-fill: white;
 }
 
-.c-text-field{
-    -fx-background-color: #7f1c27 , white , white;
+.c-text-field {
+    -fx-background-color: #7f1c27, white, white;
     -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
 }
+
 .c-text-field:focused {
     -fx-background-color: transparent;
     -fx-border-color: #7f1c27;
@@ -60,7 +61,7 @@
     -fx-text-fill: white;
 }
 
-.fd-btn:armed{
+.fd-btn:armed {
     -fx-background-color: white;
     -fx-text-fill: #7f1c27;
 }
@@ -77,9 +78,34 @@
     -fx-text-fill: #7f1c27;
 }
 
-.ad-btn:armed{
+.ad-btn:armed {
     -fx-background-color: #7f1c27;
     -fx-text-fill: white;
+}
+
+.tg-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: #7f1c27;
+    -fx-border-radius: 0;
+    -fx-text-fill: #7f1c27;
+}
+
+.tg-btn:hover {
+    -fx-background-color: #7f1c27;
+    -fx-text-fill: white;
+    -fx-border-radius: 0;
+}
+
+.tg-btn:armed {
+    -fx-background-color: white;
+    -fx-text-fill: #7f1c27;
+    -fx-border-radius: 0;
+}
+
+.tg-btn:selected {
+    -fx-background-color: #7f1c27;
+    -fx-text-fill: white;
+    -fx-border-radius: 0;
 }
 
 .transparent-btn {
@@ -94,16 +120,17 @@
     -fx-text-fill: white;
 }
 
-.transparent-btn:armed{
+.transparent-btn:armed {
     -fx-background-color: white;
     -fx-text-fill: #7f1c27;
 }
 
-.ad-field{
+.ad-field {
     -fx-background-color: transparent;
-    -fx-border-color: white ;
+    -fx-border-color: white;
     -fx-text-fill: white;
 }
+
 .ad-field:focused {
     -fx-background-color: transparent;
     -fx-border-color: #7f1c27;

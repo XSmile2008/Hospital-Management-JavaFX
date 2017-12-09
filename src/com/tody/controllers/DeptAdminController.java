@@ -1,17 +1,12 @@
 package com.tody.controllers;
 
-import com.tody.datamodel.Datasource;
-import com.tody.datamodel.DeptAdmin;
-import com.tody.datamodel.Doctor;
-import com.tody.datamodel.Patient;
+import com.tody.datamodel.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
@@ -22,8 +17,19 @@ import java.util.List;
  * Created by Olha Dovhal on 12/06/2017.
  */
 public class DeptAdminController {
+
+    //Left
     @FXML
-    BorderPane borderPane;
+    Label userId, userName;
+
+    @FXML
+    ToggleGroup tgSidebar;
+    @FXML
+    ToggleButton tgBtnNewReg;
+    @FXML
+    ToggleButton tgBtnViewPatients;
+    @FXML
+    ToggleButton tgBtnViewOutPatients;
 
     @FXML
     AnchorPane registrationView, mainView;
@@ -31,11 +37,8 @@ public class DeptAdminController {
     TabPane viewPatient;
 
     @FXML
-    Button newRegBtn;
-    @FXML
-    Button viewPatientBtn;
-    @FXML
-    Label userId, userName, userName1, nameLabel, reasonLabel, phoneLabel, addressLabel, referLabel, ipidLabel, opidLabel, ageLabel;
+    Label userNameWelcome, nameLabel, reasonLabel, phoneLabel, addressLabel, referLabel, ipidLabel, opidLabel, ageLabel;
+
     @FXML
     TextField nameTxtFd, reasonTxtFd, phoneTxtFd, addressTxtFd, ipidTxtFd, opidTxtFd, ageTxtFd, usrInput,
             viewID, viewName, viewAge, viewAddress, viewPhone;
@@ -46,58 +49,54 @@ public class DeptAdminController {
     GridPane gridPane;
 
     @FXML
-    TableView<Patient> patientsTable;
+    TableView<Patient> tvPatients;
 
     @FXML
-    TableColumn<Patient, String> idCol;
-    @FXML
-    TableColumn<Patient, String> nameCol;
-    @FXML
-    TableColumn<Patient, Integer> ageCol;
-    @FXML
-    TableColumn<Patient, String> addressCol;
-    @FXML
-    TableColumn<Patient, String> phoneCol;
+    TableView<Op> tvOp;
 
     private String id;
 
     public void initialize() {
+
     }
 
     @FXML
-    private void viewNewRegistration() {
-        registrationView.setVisible(true);
+    private void onNewRegistrationClicked() {
         mainView.setVisible(false);
+        registrationView.setVisible(true);
         viewPatient.setVisible(false);
-
-        newRegBtn.setStyle("-fx-background-color: #7f1c27; -fx-text-fill: white;");
-        viewPatientBtn.setStyle("");
+        tvOp.setVisible(false);
     }
 
     @FXML
-    private void viewPatientUI() {
-        viewPatient.setVisible(true);
+    private void onViewPatientsClicked() {
         mainView.setVisible(false);
         registrationView.setVisible(false);
-
-        newRegBtn.setStyle("");
-        viewPatientBtn.setStyle("-fx-background-color: #7f1c27; -fx-text-fill: white;");
+        viewPatient.setVisible(true);
+        tvOp.setVisible(false);
     }
 
+    @FXML
+    private void onViewOutPatientsClicked() {
+        mainView.setVisible(false);
+        registrationView.setVisible(false);
+        viewPatient.setVisible(false);
+        tvOp.setVisible(true);
+    }
 
     @FXML
     private void validateOPID() {
-        ArrayList op = Datasource.getInstance().validateOPID(Integer.parseInt(opidTxtFd.getText()));
-        if (!op.isEmpty()) {
+        Op op = Datasource.getInstance().queryOpById(Integer.parseInt(opidTxtFd.getText()));
+        if (op != null) {
             nameLabel.setVisible(true);
             nameTxtFd.setVisible(true);
-            nameTxtFd.setText((String) op.get(0));
+            nameTxtFd.setText(op.name.getValue());
             nameTxtFd.setEditable(false);
             ageLabel.setVisible(true);
             ageTxtFd.setVisible(true);
             reasonLabel.setVisible(true);
             reasonTxtFd.setVisible(true);
-            reasonTxtFd.setText((String) op.get(1));
+            reasonTxtFd.setText(op.reason.getValue());
             reasonTxtFd.setEditable(false);
 
             phoneLabel.setVisible(true);
@@ -219,19 +218,10 @@ public class DeptAdminController {
     }
 
     @FXML
-    private void viewPatients() {
-        idCol.setCellValueFactory(new PropertyValueFactory<>("ip_id"));
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        ageCol.setCellValueFactory(new PropertyValueFactory<>("age"));
-        addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
-        phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
-
-//        Task<ObservableList<Patient>> task = new GetAllPatientsTask();
-//        patientsTable.itemsProperty().bind(task.valueProperty());
-        ObservableList<Patient> data = FXCollections.observableArrayList(Datasource.getInstance().queryAllPatients());
-
-
-        patientsTable.setItems(data);
+    private void updatePatients() {
+        tvPatients.getItems().setAll(Datasource.getInstance().queryAllPatients());
+        //        Task<ObservableList<Patient>> task = new GetAllPatientsTask();
+//        tvPatients.itemsProperty().bind(task.valueProperty());
 //        new Thread(task).start();
     }
 
@@ -280,7 +270,7 @@ public class DeptAdminController {
         this.id = id;
         DeptAdmin user = Datasource.getInstance().queryDeptAdmin(id);
         userName.setText(user.getName());
-        userName1.setText(user.getName());
+        userNameWelcome.setText(user.getName());
         userId.setText(id);
 
     }

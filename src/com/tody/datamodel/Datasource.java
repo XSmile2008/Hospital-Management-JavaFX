@@ -1,5 +1,7 @@
 package com.tody.datamodel;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import javafx.collections.FXCollections;
 
 import java.sql.*;
@@ -18,7 +20,8 @@ public class Datasource {
     private PreparedStatement queryLogin;
     private PreparedStatement queryFrontDeskUser;
     private PreparedStatement queryDepartmentAdmin;
-    private PreparedStatement storeOPID;
+    private PreparedStatement storeOP;
+    private PreparedStatement queryOP;
     private PreparedStatement queryOPID;
     private PreparedStatement queryDoctors;
     private PreparedStatement storePatient;
@@ -108,7 +111,8 @@ public class Datasource {
             queryFrontDeskUser = conn.prepareStatement("SELECT * FROM FrontDeskUser WHERE id=?");
             queryDepartmentAdmin = conn.prepareStatement("SELECT * FROM DepartmentSecretary WHERE id=?");
             queryDoctor = conn.prepareStatement("SELECT  * FROM Doctors WHERE id=?");
-            storeOPID = conn.prepareStatement("INSERT INTO op (opid, Name, Reason) VALUES (?,?,?)");
+            storeOP = conn.prepareStatement("INSERT INTO op (opid, Name, Reason) VALUES (?,?,?)");
+            queryOP = conn.prepareStatement("SELECT * FROM op");
             queryOPID = conn.prepareStatement("SELECT * FROM op WHERE opid=?");
             queryDoctors = conn.prepareStatement("SELECT * FROM Doctors");
             storePatient = conn.prepareStatement("INSERT INTO Patients(IP_id, Name, Age, Address, Phone) VALUES (?,?,?,?,?)");
@@ -144,8 +148,11 @@ public class Datasource {
             if (queryDepartmentAdmin != null) {
                 queryDepartmentAdmin.close();
             }
-            if (storeOPID != null) {
-                storeOPID.close();
+            if (storeOP != null) {
+                storeOP.close();
+            }
+            if (queryOP != null) {
+                queryOP.close();
             }
             if (queryOPID != null) {
                 queryOPID.close();
@@ -212,23 +219,40 @@ public class Datasource {
         return status;
     }
 
-    public ArrayList<String> validateOPID(int id) {
+    @Nullable
+    public Op queryOpById(int id) {
         try {
             queryOPID.setInt(1, id);
             ResultSet result = queryOPID.executeQuery();
-            ArrayList op = new ArrayList();
-            while (result.next()) {
-                String name = result.getString(2);
-                op.add(name);
-                String reason = result.getString(3);
-                op.add(reason);
-            }
-            return op;
+            return result.next() ? new Op(
+                    result.getInt(1),
+                    result.getString(2),
+                    result.getString(3)
+            ) : null;
         } catch (SQLException e) {
             System.out.println("Error validating OPID " + e.getMessage());
             return null;
         }
+    }
 
+    @NotNull
+    public List<Op> queryOps() {
+        List<Op> ops = new ArrayList<>();
+        try {
+            ResultSet result = queryOP.executeQuery();
+            while (result.next()) {
+                ops.add(
+                        new Op(
+                                result.getInt(1),
+                                result.getString(2),
+                                result.getString(3)
+                        )
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Error validating OPID " + e.getMessage());
+        }
+        return ops;
     }
 
     public FrontDeskUser queryFrontDeskUser(String userId) {
@@ -317,10 +341,10 @@ public class Datasource {
     public boolean storeOPID(int opid, String name, String reason) {
         boolean status = false;
         try {
-            storeOPID.setInt(1, opid);
-            storeOPID.setString(2, name);
-            storeOPID.setString(3, reason);
-            if (storeOPID.executeUpdate() == 1) {
+            storeOP.setInt(1, opid);
+            storeOP.setString(2, name);
+            storeOP.setString(3, reason);
+            if (storeOP.executeUpdate() == 1) {
                 status = true;
             }
             return status;
@@ -621,7 +645,7 @@ public class Datasource {
     // Queries all users from the database
     public List queryAllUsers() {
         try {
-            List users = new ArrayList();
+            List<Object> users = new ArrayList<>();
             ResultSet result = queryAllUsers.executeQuery();
 
             while (result.next()) {
