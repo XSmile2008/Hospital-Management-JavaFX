@@ -347,7 +347,7 @@
                 </TabPane>
 
                 <!--Out patients-->
-                <TableView fx:id="tvOp">
+                <TableView fx:id="tvOp" visible="false">
                     <columns>
                         <TableColumn editable="false"
                                      minWidth="70.0" prefWidth="70.0"

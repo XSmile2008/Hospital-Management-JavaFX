@@ -2,10 +2,9 @@ package com.tody.controllers;
 
 import com.tody.datamodel.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
@@ -74,6 +73,7 @@ public class DeptAdminController {
         registrationView.setVisible(false);
         viewPatient.setVisible(true);
         tvOp.setVisible(false);
+        updatePatients();//TODO:
     }
 
     @FXML
@@ -82,6 +82,11 @@ public class DeptAdminController {
         registrationView.setVisible(false);
         viewPatient.setVisible(false);
         tvOp.setVisible(true);
+
+        tvOp.setItems(FXCollections.observableArrayList(Datasource.getInstance().queryOps()));
+
+        TableColumn<Op, Integer> column = (TableColumn<Op, Integer>) tvOp.getColumns().get(0);
+        column.setCellValueFactory(new PropertyValueFactory<>("id"));
     }
 
     @FXML
@@ -90,13 +95,13 @@ public class DeptAdminController {
         if (op != null) {
             nameLabel.setVisible(true);
             nameTxtFd.setVisible(true);
-            nameTxtFd.setText(op.name.getValue());
+            nameTxtFd.setText(op.getName());
             nameTxtFd.setEditable(false);
             ageLabel.setVisible(true);
             ageTxtFd.setVisible(true);
             reasonLabel.setVisible(true);
             reasonTxtFd.setVisible(true);
-            reasonTxtFd.setText(op.reason.getValue());
+            reasonTxtFd.setText(op.getReason());
             reasonTxtFd.setEditable(false);
 
             phoneLabel.setVisible(true);
@@ -154,8 +159,6 @@ public class DeptAdminController {
             ipidTxtFd.setText(id.toString());
             System.out.println("IPID : " + id);
         }
-
-
     }
 
     @FXML
@@ -213,16 +216,11 @@ public class DeptAdminController {
                 error.show();
             }
         }
-
-
     }
 
     @FXML
     private void updatePatients() {
         tvPatients.getItems().setAll(Datasource.getInstance().queryAllPatients());
-        //        Task<ObservableList<Patient>> task = new GetAllPatientsTask();
-//        tvPatients.itemsProperty().bind(task.valueProperty());
-//        new Thread(task).start();
     }
 
     @FXML
@@ -279,12 +277,5 @@ public class DeptAdminController {
     private void logOut() {
         MainController controller = new MainController();
         controller.logOut();
-    }
-
-    class GetAllPatientsTask extends Task {
-        @Override
-        public ObservableList call() throws Exception {
-            return FXCollections.observableArrayList(Datasource.getInstance().queryAllPatients());
-        }
     }
 }
