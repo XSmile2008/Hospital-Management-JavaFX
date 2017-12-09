@@ -17,46 +17,37 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainController {
-    @FXML
-    TextField userIdField;
-    @FXML
-    ToggleGroup userType;
-    @FXML
-    PasswordField passwordField;
-    @FXML
-    Label loginError;
-    @FXML
-    Button login_btn;
-    String userId;
 
-    static Stage window;
-    static Stage loginWindow;
-    FXMLLoader loader;
+    private static Stage window;
+    private static Stage loginWindow;
+
+    @FXML TextField userIdField;
+    @FXML ToggleGroup userType;
+    @FXML PasswordField passwordField;
+    @FXML Label loginError;
+    @FXML Button login_btn;
+
+    private String userId;
+
+    private FXMLLoader loader;
 
     public void initialize() {
-        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    try {
-                        login();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                try {
+                    login();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
 
         // Enables sign in button when user type is selected
-        userType.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if(userType.getSelectedToggle() != null) {
-                    login_btn.setDisable(false);
-                }else {
-                    login_btn.setDisable(true);
-                }
+        userType.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if(userType.getSelectedToggle() != null) {
+                login_btn.setDisable(false);
+            }else {
+                login_btn.setDisable(true);
             }
         });
 
@@ -115,8 +106,8 @@ public class MainController {
         try {
             window.setScene(new Scene(loader.load()));
             window.setTitle(windowTitle);
-            window.setWidth(705);
-            window.setHeight(529);
+            window.setWidth(700);
+            window.setHeight(520);
             window.setResizable(false);
             window.getIcons().add(new Image("com/tody/images/icon.png"));
             window.show();
@@ -143,7 +134,5 @@ public class MainController {
         } catch (IOException e) {
             System.out.println("Error logging out!" + e.getMessage());
         }
-
     }
-
 }

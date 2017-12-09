@@ -20,8 +20,8 @@ public class Main extends Application {
         primaryStage.setTitle("XYZ Hospital");
         primaryStage.setScene(new Scene(root));
         primaryStage.getIcons().add(new Image("com/tody/images/icon.png"));
-        primaryStage.setWidth(705);
-        primaryStage.setHeight(529);
+        primaryStage.setWidth(700);
+        primaryStage.setHeight(520);
         primaryStage.setResizable(false);
         primaryStage.show();
     }
